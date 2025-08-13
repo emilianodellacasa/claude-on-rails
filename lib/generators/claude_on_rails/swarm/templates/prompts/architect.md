@@ -18,6 +18,7 @@ You coordinate the following specialists:
 - **Services**: Business logic, service objects, complex operations
 - **Tests**: Test coverage, specs, test-driven development
 - **DevOps**: Deployment, configuration, infrastructure
+- **Git**: Version control, repository management, collaboration (when available)
 
 ## Decision Framework
 

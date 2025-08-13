@@ -26,6 +26,9 @@ module ClaudeOnRails
       class_option :dev_mcp, type: :boolean, default: true,
                              desc: 'Include Rails Dev MCP Server for development server management'
 
+      class_option :git_mcp, type: :boolean, default: true,
+                             desc: 'Include Git MCP Server for repository management'
+
       def analyze_project
         say 'Analyzing Rails project structure...', :green
         @project_analysis = ClaudeOnRails.analyze_project(Rails.root)
@@ -43,14 +46,19 @@ module ClaudeOnRails
         # Check for Rails Dev MCP
         @include_dev_mcp = options[:dev_mcp] && check_rails_dev_mcp_availability
 
+        # Check for Git MCP
+        @include_git_mcp = options[:git_mcp] && check_git_mcp_availability
+
         say "Project type: #{@api_only ? 'API-only' : 'Full-stack Rails'}", :cyan
         say "Test framework: #{@test_framework}", :cyan if @test_framework
         say "GraphQL detected: #{@has_graphql ? 'Yes' : 'No'}", :cyan
         say "Rails MCP Server: #{@include_mcp_server ? 'Available' : 'Not available'}", :cyan
         say "Rails Dev MCP: #{@include_dev_mcp ? 'Available' : 'Not available'}", :cyan
+        say "Git MCP: #{@include_git_mcp ? 'Available' : 'Not available'}", :cyan
 
         # Offer MCP setup if enabled but not available
         offer_mcp_setup if options[:mcp_server] && !@include_mcp_server
+        offer_git_mcp_setup if options[:git_mcp] && !@include_git_mcp
 
         # Show which agents will be created
         say "\nAgents to be created:", :yellow
@@ -158,6 +166,7 @@ module ClaudeOnRails
         end
 
         list << 'devops' if File.directory?(Rails.root.join('config'))
+        list << 'git' if @include_git_mcp
         list
       end
 
@@ -187,6 +196,33 @@ module ClaudeOnRails
           system('which rails-dev-mcp > /dev/null 2>&1')
       rescue StandardError
         false
+      end
+
+      def check_git_mcp_availability
+        ClaudeOnRails::GitMCPSupport.usable?
+      rescue StandardError
+        false
+      end
+
+      def offer_git_mcp_setup
+        say "\n🔧 Git MCP Server Enhancement Available!", :yellow
+        say "Git MCP Server provides your AI agents with complete Git repository management.", :cyan
+
+        if yes?("Would you like to set it up now? (Y/n)", :green)
+          say "\nStarting Git MCP Server setup...", :green
+          system('bundle exec rake claude_on_rails:setup_git_mcp')
+
+          # Re-check availability after setup
+          @include_git_mcp = check_git_mcp_availability
+
+          if @include_git_mcp
+            say "\n✓ Git MCP Server is now available!", :green
+          else
+            say "\nSetup was not completed. Continuing without Git MCP Server.", :yellow
+          end
+        else
+          say "\nYou can set it up later with: bundle exec rake claude_on_rails:setup_git_mcp", :cyan
+        end
       end
     end
   end
