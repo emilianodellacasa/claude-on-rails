@@ -76,6 +76,7 @@ Once the swarm is running, just describe what you want to build in the Claude in
 
 > Build a RESTful API for our mobile app with JWT auth
 [API development with authentication]
+```
 
 The swarm automatically:
 - Analyzes your request
