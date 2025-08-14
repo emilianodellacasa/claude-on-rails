@@ -77,11 +77,6 @@ Once the swarm is running, just describe what you want to build in the Claude in
 > Build a RESTful API for our mobile app with JWT auth
 [API development with authentication]
 
-> Commit these changes and create a release branch for v2.0
-
-> Review the commit history for the user model changes
-```
-
 The swarm automatically:
 - Analyzes your request
 - Delegates to appropriate specialists
@@ -205,19 +200,6 @@ When Rails MCP Server is available:
 - Version-specific guidance ensures compatibility
 - Agents reference canonical implementations
 - Complex features follow official patterns
-
-## Git Repository Management
-
-When your Rails project is a Git repository, ClaudeOnRails automatically includes a Git specialist agent that can help with:
-
-- **Version Control**: Commit changes, create branches, manage repository history
-- **Code Reviews**: Analyze diffs, review commit history, and track changes
-- **Branch Management**: Implement Git flow patterns, manage feature branches
-- **Collaboration**: Support team workflows and best practices
-- **Release Management**: Tag releases and coordinate deployment branches
-
-The Git agent uses standard Git commands through the Bash tool and follows established Git best practices and workflows.
-
 
 ## Requirements
 
