@@ -32,27 +32,4 @@ namespace :claude_on_rails do
       puts "\nRun 'bundle exec rake claude_on_rails:setup_mcp' to install and configure it."
     end
   end
-
-  desc 'Check Git MCP Server status and repository information'
-  task git_status: :environment do
-    if ClaudeOnRails::GitMCPSupport.available?
-      puts '✓ Git MCP Server is installed'
-    else
-      puts '✗ Git MCP Server is not installed'
-      puts "\nRun 'bundle exec rake claude_on_rails:setup_git_mcp' to install it."
-    end
-
-    if ClaudeOnRails::GitMCPSupport.git_repo_available?
-      puts '✓ Git repository detected'
-      status = ClaudeOnRails::GitMCPSupport.repo_status
-      puts "\nRepository status:"
-      puts "  • Clean: #{status[:clean] ? 'Yes' : 'No'}"
-      puts "  • Staged files: #{status[:has_staged] ? 'Yes' : 'No'}"
-      puts "  • Unstaged changes: #{status[:has_unstaged] ? 'Yes' : 'No'}"
-      puts "  • Untracked files: #{status[:has_untracked] ? 'Yes' : 'No'}"
-    else
-      puts '✗ No Git repository found'
-      puts "\nRun 'git init' to initialize a repository."
-    end
-  end
 end
