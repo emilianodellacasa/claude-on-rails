@@ -16,14 +16,6 @@ swarm:
       command: rails-dev-mcp
       args: []
 <% end %>
-<% if @include_git_mcp %>
-    - name: git
-      type: stdio
-      command: git-mcp-server
-      args: []
-      env:
-        GIT_REPO_PATH: <%= Rails.root %>
-<% end %>
 <% end %>
   instances:
     architect:
@@ -134,13 +126,4 @@ swarm:
       model: opus
       allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
       prompt_file: .claude-on-rails/prompts/devops.md
-<% end %>
-<% if @include_git_mcp %>
-    
-    git:
-      description: "Git repository management, version control, and collaboration specialist"
-      directory: .
-      model: opus
-      allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
-      prompt_file: .claude-on-rails/prompts/git.md
 <% end %>

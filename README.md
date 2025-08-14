@@ -19,7 +19,6 @@ ClaudeOnRails creates a team of specialized AI agents:
 - **Services**: Implements business logic and service objects
 - **Tests**: Ensures comprehensive test coverage
 - **DevOps**: Handles deployment and infrastructure
-- **Git**: Manages version control and repository collaboration (when enabled)
 
 Each agent works in their specific domain (directory) and can collaborate with other agents to implement complex features.
 
@@ -40,12 +39,11 @@ bundle install
 rails generate claude_on_rails:swarm
 ```
 
-During generation, you'll be offered to set up Rails MCP Server for enhanced documentation access and Git MCP Server for repository management. Simply press Y when prompted!
+During generation, you'll be offered to set up Rails MCP Server for enhanced documentation access. Simply press Y when prompted!
 
 This will:
 - Analyze your Rails project structure
 - Optionally set up Rails MCP Server (recommended)
-- Optionally set up Git MCP Server for repository management
 - Generate a customized swarm configuration
 - Create agent-specific prompts
 - Set up your development environment
@@ -79,10 +77,8 @@ Once the swarm is running, just describe what you want to build in the Claude in
 [API development with authentication]
 
 > Commit these changes and create a release branch for v2.0
-[Git agent handles version control and branching]
 
 > Review the commit history for the user model changes
-[Git agent analyzes repository history and provides insights]
 ```
 
 The swarm automatically:
@@ -209,64 +205,6 @@ When Rails MCP Server is available:
 - Agents reference canonical implementations
 - Complex features follow official patterns
 
-## Git Repository Management with Git MCP Server
-
-ClaudeOnRails can integrate with Git MCP Server to provide your AI agents with comprehensive Git repository management capabilities.
-
-### Benefits
-
-- **Version Control Operations**: Agents can perform Git operations (commit, branch, merge, etc.)
-- **Code History Analysis**: Review commit history, diffs, and blame information
-- **Branch Management**: Create, switch, and merge branches automatically
-- **Release Management**: Tag releases and coordinate deployments
-- **Collaboration Support**: Follow Git best practices and team workflows
-- **Security**: Prevent accidental commits of sensitive information
-
-### Setup
-
-To enable Git repository management in your swarm:
-
-1. Install the Git MCP Server:
-```bash
-gem install git-mcp-server --no-document
-```
-
-2. Ensure your project is a Git repository:
-```bash
-git init  # if not already initialized
-```
-
-3. Generate your swarm with Git support:
-```bash
-rails generate claude_on_rails:swarm --git-mcp
-```
-
-### Check Status
-
-To verify your Git MCP Server installation and repository status:
-
-```bash
-gem list git-mcp-server  # Check if Git MCP Server is installed
-git status               # Check repository status
-```
-
-### How It Works
-
-When Git MCP Server is available:
-- The **Git specialist agent** handles all repository operations
-- Agents can commit changes with proper commit messages
-- Branch strategies are automatically followed
-- Code reviews are supported through Git diff analysis
-- Release tagging and deployment coordination
-
-### Available Git Operations
-
-The Git agent can perform:
-- Repository status and history analysis (`git_status`, `git_log`)
-- Branch operations (`git_branch`, `git_checkout`, `git_merge`)
-- Change management (`git_diff`, `git_commit`, `git_stash`)
-- Remote synchronization (`git_push`, `git_pull`)
-- Release management (`git_tag`)
 
 ## Requirements
 
@@ -282,7 +220,6 @@ See the [examples](./examples) directory for:
 - API-only applications
 - Real-time features with Turbo/Stimulus
 - Performance optimization workflows
-- Git workflow management and collaboration
 
 ## Contributing
 
@@ -297,4 +234,3 @@ MIT License - see [LICENSE](./LICENSE) for details.
 - Powered by [claude-swarm](https://github.com/parruda/claude-swarm)
 - Built for [Claude Code](https://github.com/anthropics/claude-code)
 - Integrates with [Rails MCP Server](https://github.com/maquina-app/rails-mcp-server)
-- Supports Git repository management through Git MCP Server

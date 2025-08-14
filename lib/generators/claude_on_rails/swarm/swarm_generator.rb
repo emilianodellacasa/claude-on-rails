@@ -26,9 +26,6 @@ module ClaudeOnRails
       class_option :dev_mcp, type: :boolean, default: true,
                              desc: 'Include Rails Dev MCP Server for development server management'
 
-      class_option :git_mcp, type: :boolean, default: true,
-                             desc: 'Include Git MCP Server for repository management'
-
       def analyze_project
         say 'Analyzing Rails project structure...', :green
         @project_analysis = ClaudeOnRails.analyze_project(Rails.root)
@@ -46,15 +43,11 @@ module ClaudeOnRails
         # Check for Rails Dev MCP
         @include_dev_mcp = options[:dev_mcp] && check_rails_dev_mcp_availability
 
-        # Check for Git MCP
-        @include_git_mcp = options[:git_mcp] && check_git_mcp_availability
-
         say "Project type: #{@api_only ? 'API-only' : 'Full-stack Rails'}", :cyan
         say "Test framework: #{@test_framework}", :cyan if @test_framework
         say "GraphQL detected: #{@has_graphql ? 'Yes' : 'No'}", :cyan
         say "Rails MCP Server: #{@include_mcp_server ? 'Available' : 'Not available'}", :cyan
         say "Rails Dev MCP: #{@include_dev_mcp ? 'Available' : 'Not available'}", :cyan
-        say "Git MCP: #{@include_git_mcp ? 'Available' : 'Not available'}", :cyan
 
         # Offer MCP setup if enabled but not available
         offer_mcp_setup if options[:mcp_server] && !@include_mcp_server
@@ -165,7 +158,6 @@ module ClaudeOnRails
         end
 
         list << 'devops' if File.directory?(Rails.root.join('config'))
-        list << 'git' if @include_git_mcp
         list
       end
 
@@ -193,12 +185,6 @@ module ClaudeOnRails
       def check_rails_dev_mcp_availability
         system('gem list -i rails-dev-mcp > /dev/null 2>&1') ||
           system('which rails-dev-mcp > /dev/null 2>&1')
-      rescue StandardError
-        false
-      end
-
-      def check_git_mcp_availability
-        ClaudeOnRails::GitMCPSupport.usable?
       rescue StandardError
         false
       end

@@ -22,7 +22,6 @@ RSpec.describe ClaudeOnRails::ProjectAnalyzer do
         :has_turbo,
         :has_devise,
         :has_sidekiq,
-        :has_git_mcp,
         :javascript_framework,
         :database,
         :deployment,
@@ -98,63 +97,6 @@ RSpec.describe ClaudeOnRails::ProjectAnalyzer do
 
         it 'detects Devise' do
           expect(analyzer.analyze[:has_devise]).to be true
-        end
-      end
-    end
-
-    context 'Git MCP detection' do
-      context 'when git-mcp-server is available and project has Git repository' do
-        before do
-          allow(analyzer).to receive(:system).with('gem list -i git-mcp-server > /dev/null 2>&1').and_return(true)
-          FileUtils.mkdir_p(File.join(tmpdir, '.git'))
-        end
-
-        it 'detects Git MCP as available' do
-          expect(analyzer.analyze[:has_git_mcp]).to be true
-        end
-      end
-
-      context 'when git-mcp-server executable is available and project has Git repository' do
-        before do
-          allow(analyzer).to receive(:system).with('gem list -i git-mcp-server > /dev/null 2>&1').and_return(false)
-          allow(analyzer).to receive(:system).with('which git-mcp-server > /dev/null 2>&1').and_return(true)
-          FileUtils.mkdir_p(File.join(tmpdir, '.git'))
-        end
-
-        it 'detects Git MCP as available' do
-          expect(analyzer.analyze[:has_git_mcp]).to be true
-        end
-      end
-
-      context 'when git-mcp-server is available but no Git repository' do
-        before do
-          allow(analyzer).to receive(:system).with('gem list -i git-mcp-server > /dev/null 2>&1').and_return(true)
-          allow(analyzer).to receive(:system).with('git rev-parse --git-dir > /dev/null 2>&1').and_return(false)
-        end
-
-        it 'detects Git MCP as not available' do
-          expect(analyzer.analyze[:has_git_mcp]).to be false
-        end
-      end
-
-      context 'when git-mcp-server is not available' do
-        before do
-          allow(analyzer).to receive(:system).and_return(false)
-          FileUtils.mkdir_p(File.join(tmpdir, '.git'))
-        end
-
-        it 'detects Git MCP as not available' do
-          expect(analyzer.analyze[:has_git_mcp]).to be false
-        end
-      end
-
-      context 'when system command raises an error' do
-        before do
-          allow(analyzer).to receive(:system).and_raise(StandardError)
-        end
-
-        it 'detects Git MCP as not available' do
-          expect(analyzer.analyze[:has_git_mcp]).to be false
         end
       end
     end
