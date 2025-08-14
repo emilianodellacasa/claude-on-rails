@@ -16,6 +16,7 @@ module ClaudeOnRails
         has_turbo: turbo?,
         has_devise: devise?,
         has_sidekiq: sidekiq?,
+        has_git_mcp: git_mcp_available?,
         javascript_framework: detect_javascript_framework,
         database: detect_database,
         deployment: detect_deployment_method,
@@ -71,6 +72,18 @@ module ClaudeOnRails
       return false unless File.exist?(gemfile_path)
 
       File.read(gemfile_path).include?('sidekiq')
+    end
+
+    def git_mcp_available?
+      # Check if git-mcp-server is available system-wide
+      return false unless system('gem list -i git-mcp-server > /dev/null 2>&1') ||
+                          system('which git-mcp-server > /dev/null 2>&1')
+
+      # Check if current project is a git repository
+      git_dir = File.join(root_path, '.git')
+      File.directory?(git_dir) || Dir.chdir(root_path) { system('git rev-parse --git-dir > /dev/null 2>&1') }
+    rescue StandardError
+      false
     end
 
     def detect_javascript_framework
