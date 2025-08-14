@@ -16,6 +16,7 @@ module ClaudeOnRails
         has_turbo: turbo?,
         has_devise: devise?,
         has_sidekiq: sidekiq?,
+        has_git: git_repository?,
         javascript_framework: detect_javascript_framework,
         database: detect_database,
         deployment: detect_deployment_method,
@@ -71,6 +72,17 @@ module ClaudeOnRails
       return false unless File.exist?(gemfile_path)
 
       File.read(gemfile_path).include?('sidekiq')
+    end
+
+    def git_repository?
+      # Check if .git directory exists
+      git_dir = File.join(root_path, '.git')
+      return true if File.directory?(git_dir)
+
+      # Check if we're in a Git repository (could be a subdirectory)
+      Dir.chdir(root_path) { system('git rev-parse --git-dir > /dev/null 2>&1') }
+    rescue StandardError
+      false
     end
 
     def detect_javascript_framework

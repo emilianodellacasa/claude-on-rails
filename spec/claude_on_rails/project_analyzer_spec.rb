@@ -22,6 +22,7 @@ RSpec.describe ClaudeOnRails::ProjectAnalyzer do
         :has_turbo,
         :has_devise,
         :has_sidekiq,
+        :has_git,
         :javascript_framework,
         :database,
         :deployment,
@@ -97,6 +98,48 @@ RSpec.describe ClaudeOnRails::ProjectAnalyzer do
 
         it 'detects Devise' do
           expect(analyzer.analyze[:has_devise]).to be true
+        end
+      end
+    end
+
+    context 'Git repository detection' do
+      context 'when .git directory exists' do
+        before do
+          FileUtils.mkdir_p(File.join(tmpdir, '.git'))
+        end
+
+        it 'detects Git repository' do
+          expect(analyzer.analyze[:has_git]).to be true
+        end
+      end
+
+      context 'when git rev-parse succeeds' do
+        before do
+          allow(analyzer).to receive(:system).with('git rev-parse --git-dir > /dev/null 2>&1').and_return(true)
+        end
+
+        it 'detects Git repository' do
+          expect(analyzer.analyze[:has_git]).to be true
+        end
+      end
+
+      context 'when no Git repository exists' do
+        before do
+          allow(analyzer).to receive(:system).with('git rev-parse --git-dir > /dev/null 2>&1').and_return(false)
+        end
+
+        it 'detects no Git repository' do
+          expect(analyzer.analyze[:has_git]).to be false
+        end
+      end
+
+      context 'when Git command raises an error' do
+        before do
+          allow(analyzer).to receive(:system).and_raise(StandardError)
+        end
+
+        it 'detects no Git repository' do
+          expect(analyzer.analyze[:has_git]).to be false
         end
       end
     end

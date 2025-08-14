@@ -43,11 +43,15 @@ module ClaudeOnRails
         # Check for Rails Dev MCP
         @include_dev_mcp = options[:dev_mcp] && check_rails_dev_mcp_availability
 
+        # Check for Git repository
+        @has_git = @project_analysis[:has_git]
+
         say "Project type: #{@api_only ? 'API-only' : 'Full-stack Rails'}", :cyan
         say "Test framework: #{@test_framework}", :cyan if @test_framework
         say "GraphQL detected: #{@has_graphql ? 'Yes' : 'No'}", :cyan
         say "Rails MCP Server: #{@include_mcp_server ? 'Available' : 'Not available'}", :cyan
         say "Rails Dev MCP: #{@include_dev_mcp ? 'Available' : 'Not available'}", :cyan
+        say "Git repository: #{@has_git ? 'Yes' : 'No'}", :cyan
 
         # Offer MCP setup if enabled but not available
         offer_mcp_setup if options[:mcp_server] && !@include_mcp_server
@@ -158,6 +162,7 @@ module ClaudeOnRails
         end
 
         list << 'devops' if File.directory?(Rails.root.join('config'))
+        list << 'git' if @has_git
         list
       end
 

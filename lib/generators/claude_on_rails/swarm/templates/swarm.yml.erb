@@ -127,3 +127,12 @@ swarm:
       allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
       prompt_file: .claude-on-rails/prompts/devops.md
 <% end %>
+<% if @has_git %>
+    
+    git:
+      description: "Git repository management, version control, and collaboration specialist"
+      directory: .
+      model: opus
+      allowed_tools: [Read, Edit, Write, Bash, Grep, Glob, LS]
+      prompt_file: .claude-on-rails/prompts/git.md
+<% end %>
