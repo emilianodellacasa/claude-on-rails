@@ -222,28 +222,32 @@ ClaudeOnRails can integrate with Git MCP Server to provide your AI agents with c
 - **Collaboration Support**: Follow Git best practices and team workflows
 - **Security**: Prevent accidental commits of sensitive information
 
-### Automated Setup
+### Setup
 
-When you run `rails generate claude_on_rails:swarm`, you'll be prompted to set up Git MCP Server. Just press Y!
+To enable Git repository management in your swarm:
 
-If you skipped it initially, you can set it up anytime:
-
+1. Install the Git MCP Server:
 ```bash
-bundle exec rake claude_on_rails:setup_git_mcp
+gem install git-mcp-server --no-document
 ```
 
-This interactive command will:
-- Install the Git MCP Server gem
-- Initialize a Git repository if needed
-- Configure your environment for Git operations
+2. Ensure your project is a Git repository:
+```bash
+git init  # if not already initialized
+```
+
+3. Generate your swarm with Git support:
+```bash
+rails generate claude_on_rails:swarm --git-mcp
+```
 
 ### Check Status
 
 To verify your Git MCP Server installation and repository status:
 
 ```bash
-bundle exec rake claude_on_rails:git_status
-bundle exec rake claude_on_rails:repo_info
+gem list git-mcp-server  # Check if Git MCP Server is installed
+git status               # Check repository status
 ```
 
 ### How It Works
